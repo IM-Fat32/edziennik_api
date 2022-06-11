@@ -39,9 +39,6 @@ class UserDetaiilsController extends Controller
     public function store(StoreUserDetailsRequest $request)
     {
         $requestData = $request->all();
-        $datetime = Carbon::now();
-        $requestData['updated_at'] = $datetime->toDateTimeString();
-        $requestData['created_at'] = $datetime->toDateTimeString();
         return UserDetails::create($requestData);
     }
 
