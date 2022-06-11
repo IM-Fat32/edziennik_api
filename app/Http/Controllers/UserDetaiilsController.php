@@ -63,8 +63,6 @@ class UserDetaiilsController extends Controller
     public function update(UpdateUserDetailsRequest $request, UserDetails $userDetails)
     {
         $requestData = $request->all();
-        $datetime = Carbon::now();
-        $requestData['updated_at'] = $datetime->toDateTimeString();
         $userDetails->update($requestData);
         return $userDetails;
     }

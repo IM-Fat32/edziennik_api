@@ -23,8 +23,6 @@ class UserDetails extends Model
         'student_id',
         'user_id',
         'user_type',
-        'school_class',
-        'birth_date',
-        'updated_at'
+        'school_class'
     ];
 }
