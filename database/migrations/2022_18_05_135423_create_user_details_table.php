@@ -30,6 +30,8 @@ return new class extends Migration
             $table->bigInteger('user_id');
             $table->foreignIdFor(\App\Models\SchoolClass::class, 'school_class')->nullable();
             $table->date('birth_date')->nullable();
+            $table->date('updated_at')->nullable();
+            $table->date('created_at')->nullable();
         });
     }
 

@@ -40,6 +40,7 @@ class UserDetaiilsController extends Controller
     {
         $requestData = $request->all();
         $datetime = Carbon::now();
+        $requestData['user_id'] = Auth::id();
         $requestData['updated_at'] = $datetime->toDateTimeString();
         $requestData['created_at'] = $datetime->toDateTimeString();
         return UserDetails::create($requestData);
