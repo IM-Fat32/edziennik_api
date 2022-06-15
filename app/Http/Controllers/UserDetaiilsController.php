@@ -43,7 +43,13 @@ class UserDetaiilsController extends Controller
         $requestData['user_id'] = Auth::id();
         $requestData['updated_at'] = $datetime->toDateTimeString();
         $requestData['created_at'] = $datetime->toDateTimeString();
-        return UserDetails::create($requestData);
+        $createdData = UserDetails::create($requestData);
+        return response()
+            ->json([
+                'createdData' => $createdData,
+                'messageEN' => "Tworzenie danych użytkownika przebiegło pomyślnie",
+                'messagePL' => "Creation of user data was successful", "code" => "200"
+            ]);
     }
 
     /**
