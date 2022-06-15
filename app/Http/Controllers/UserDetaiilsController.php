@@ -47,9 +47,9 @@ class UserDetaiilsController extends Controller
         return response()
             ->json([
                 'createdData' => $createdData,
-                'messageEN' => "Tworzenie danych użytkownika przebiegło pomyślnie",
-                'messagePL' => "Creation of user data was successful", "code" => "200"
-            ]);
+                'messagePL' => "Tworzenie danych użytkownika przebiegło pomyślnie",
+                'messageEN' => "Creation of user data was successful"
+            ], 200);
     }
 
     /**
@@ -88,7 +88,12 @@ class UserDetaiilsController extends Controller
      */
     public function destroy(UserDetails $userDetails)
     {
+        $userDetails["user_id"] = Auth::id();
         $userDetails->delete();
-        return response('', 204);
+        return response()
+            ->json([
+                'messagePL' => "Dane użytkownika zostały usunięte",
+                'messageEN' => "User data has been removed"
+            ], 204);
     }
 }
