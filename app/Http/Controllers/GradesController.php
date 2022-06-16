@@ -81,6 +81,10 @@ class GradesController extends Controller
     public function destroy(Grades $grades)
     {
         $grades->delete();
-        return response('', 204);
+        return response()
+        ->json([
+            'messagePL' => "Ocena została usunięta",
+            'messageEN' => "Grade has been removed"
+        ], 200);
     }
 }
