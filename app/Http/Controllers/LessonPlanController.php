@@ -66,6 +66,10 @@ class LessonPlanController extends Controller
     public function destroy(LessonPlan $lessonPlan)
     {
         $lessonPlan->delete();
-        return response('', 204);
+        return response()
+            ->json([
+                'messagePL' => "Plan lekcji został usunięty",
+                'messageEN' => "Lesson plan has been removed"
+            ], 200);
     }
 }
