@@ -5,23 +5,23 @@ namespace App\Http\Controllers;
 use App\Models\Grades;
 use App\Http\Requests\StoreGradesRequest;
 use App\Http\Requests\UpdateGradesRequest;
+use \Illuminate\Http\Request;
 use \Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 
 
 class GradesController extends Controller
 {
-     /**
+    /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         $allGrades = Grades::all();
-        $filteredGrades = $allGrades->filter(function ($grade) {
-            return $grade->user_id;
-            if ($grade->user_id === Auth::id()) {
+        $filteredGrades = $allGrades->filter(function ($grade)  use ($request) {
+            if ($grade->user_id === intval($request->user_id)) {
                 return true;
             }
         })->values();
@@ -35,9 +35,9 @@ class GradesController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(StoreGradesRequest $request)
-    {   
+    {
         $requestData = $request->all();
-        $datetime= Carbon::now();
+        $datetime = Carbon::now();
         $requestData['last_modificated'] = $datetime->toDateTimeString();
         return Grades::create($requestData);
     }
@@ -48,9 +48,10 @@ class GradesController extends Controller
      * @param  \App\Models\Grades  $grades
      * @return \Illuminate\Http\Response
      */
-    public function show(Grades $grades)
+    public function show(Request $request, Grades $grades)
     {
-        return $grades;
+        $grade = Grades::find($request->id);
+        return $grade;
     }
 
     /**
@@ -63,11 +64,12 @@ class GradesController extends Controller
     public function update(UpdateGradesRequest $request, Grades $grades)
     {
         $requestData = $request->all();
-        $datetime= Carbon::now();
+        $grade = Grades::find($request->id);
+        $datetime = Carbon::now();
         $requestData['updated_at'] = $datetime->toDateTimeString();
         $requestData['last_modificated'] = $datetime->toDateTimeString();
-        $grades->update($requestData);
-        return $grades;
+        $grade->update($requestData);
+        return $grade;
     }
 
     /**
