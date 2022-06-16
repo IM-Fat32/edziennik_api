@@ -70,6 +70,10 @@ class SchoolClassController extends Controller
     public function destroy(SchoolClass $schoolClass)
     {
         $schoolClass->delete();
-        return response('', 204);
+        return response()
+        ->json([
+            'messagePL' => "Dane klasy zostały usunięte",
+            'messageEN' => "School class data has been removed"
+        ], 200);
     }
 }

@@ -73,8 +73,8 @@ class SubjectController extends Controller
         $subject->delete();
         return response()
         ->json([
-            'messagePL' => "Dane użytkownika zostały usunięte",
-            'messageEN' => "User data has been removed"
+            'messagePL' => "Dane przedmiotu zostały usunięte",
+            'messageEN' => "Subject data has been removed"
         ], 200);
     }
 }
