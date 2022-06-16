@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Subject;
 use App\Http\Requests\StoreSubjectRequest;
 use App\Http\Requests\UpdateSubjectRequest;
+use \Illuminate\Http\Request;
 use \Carbon\Carbon;
 
 class SubjectController extends Controller
@@ -14,7 +15,7 @@ class SubjectController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         return Subject::all();
     }
@@ -28,7 +29,7 @@ class SubjectController extends Controller
     public function store(StoreSubjectRequest $request)
     {
         $requestData = $request->all();
-        $datetime= Carbon::now();
+        $datetime = Carbon::now();
         $requestData['updated_at'] = $datetime->toDateTimeString();
         $requestData['created_at'] = $datetime->toDateTimeString();
         return Subject::create($requestData);
@@ -70,6 +71,10 @@ class SubjectController extends Controller
     public function destroy(Subject $subject)
     {
         $subject->delete();
-        return response('', 204);
+        return response()
+        ->json([
+            'messagePL' => "Dane użytkownika zostały usunięte",
+            'messageEN' => "User data has been removed"
+        ], 200);
     }
 }
