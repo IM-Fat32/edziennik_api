@@ -23,7 +23,6 @@ return new class extends Migration
             $table->string('street');
             $table->string('city');
             $table->string('house_number');
-            $table->string('email')->unique();
             $table->bigInteger('parent_id')->nullable();
             $table->bigInteger('student_id')->nullable();
             $table->bigInteger('user_type');

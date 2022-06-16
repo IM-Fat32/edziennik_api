@@ -5,9 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\UserDetails;
 use App\Http\Requests\StoreUserDetailsRequest;
 use App\Http\Requests\UpdateUserDetailsRequest;
+use \Illuminate\Http\Response;
+use \Illuminate\Http\Request;
 use \Carbon\Carbon;
-use App\Models\User;
-use Illuminate\Support\Facades\Auth;
 
 class UserDetaiilsController extends Controller
 {
@@ -18,16 +18,6 @@ class UserDetaiilsController extends Controller
      */
     public function index()
     {
-        $allUsers = UserDetails::all();
-
-        $filteredUsersData = $allUsers->filter(function ($user) {
-            return $user->user_id;
-            if ($user->user_id === Auth::id()) {
-                return true;
-            }
-        })->values();
-
-        return $filteredUsersData;
     }
 
     /**
@@ -40,7 +30,6 @@ class UserDetaiilsController extends Controller
     {
         $requestData = $request->all();
         $datetime = Carbon::now();
-        $requestData['user_id'] = Auth::id();
         $requestData['updated_at'] = $datetime->toDateTimeString();
         $requestData['created_at'] = $datetime->toDateTimeString();
         $createdData = UserDetails::create($requestData);
@@ -55,18 +44,32 @@ class UserDetaiilsController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \Illuminate\Http\Response  $request
+     * @param  \Illuminate\Http\Request  $request
      * @param  \App\Models\UserDetails  $userDetails
      * @return \Illuminate\Http\Response
      */
-    public function show(UserDetails $userDetails)
+    public function show(Request $request, UserDetails $userDetails)
     {
+        $allUsers = UserDetails::All();
+        $filteredUsers = $allUsers->filter(function ($user) use ($request) {
+            if ($user->user_id === intval($request->user_id))
+                return true;
+        });
+
+        if (count($filteredUsers->values()) > 0)
+            return $filteredUsers->first();
+
+        return response()
+            ->json([
+                'messagePL' => "Nie znaleziono danych",
+                'messageEN' => "Data not found"
+            ], 404);
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \App\Http\Requests\UpdateUserDetailsRequest  $request
+     * @param  \App\Http\Requests\Request  $request
      * @param  \App\Models\UserDetails  $userDetails
      * @return \Illuminate\Http\Response
      */
@@ -74,10 +77,24 @@ class UserDetaiilsController extends Controller
     {
         $requestData = $request->all();
         $datetime = Carbon::now();
-        $requestData['user_id'] = Auth::id();
+        $userDetailsData = $this->getUserDetialsObject($request);
         $requestData['updated_at'] = $datetime->toDateTimeString();
-        $userDetails->update($requestData);
-        return $userDetails;
+        $requestData['user_id'] = $request->user_id;
+        $userDetailsData->update($requestData);
+        return $userDetailsData;
+    }
+
+    private function getUserDetialsObject($request)
+    {
+        $allUsers = UserDetails::All();
+        $filteredUsers = $allUsers->filter(function ($user) use ($request) {
+            if ($user->user_id === intval($request->user_id))
+                return true;
+        });
+
+
+        $userDetailsData = UserDetails::find($filteredUsers->first()->id);
+        return $userDetailsData;
     }
 
     /**
@@ -86,14 +103,14 @@ class UserDetaiilsController extends Controller
      * @param  \App\Models\UserDetails  $userDetails
      * @return \Illuminate\Http\Response
      */
-    public function destroy(UserDetails $userDetails)
+    public function destroy(Request $request, UserDetails $userDetails)
     {
-        $userDetails["user_id"] = Auth::id();
+        $userDetails = $this->getUserDetialsObject($request);
         $userDetails->delete();
         return response()
             ->json([
                 'messagePL' => "Dane użytkownika zostały usunięte",
                 'messageEN' => "User data has been removed"
-            ], 204);
+            ], 200);
     }
 }
