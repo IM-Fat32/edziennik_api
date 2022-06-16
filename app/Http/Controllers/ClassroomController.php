@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use App\Models\Classroom;
@@ -50,7 +51,7 @@ class ClassroomController extends Controller
     public function update(UpdateCLassroomRequest $request, CLassroom $classroom)
     {
         $requestData = $request->all();
-        $datetime= Carbon::now();
+        $datetime = Carbon::now();
         $requestData['updated_at'] = $datetime->toDateTimeString();
         $classroom->update($requestData);
         return $classroom;
@@ -65,6 +66,10 @@ class ClassroomController extends Controller
     public function destroy(Classroom $classroom)
     {
         $classroom->delete();
-        return response('', 204);
+        return response()
+            ->json([
+                'messagePL' => "Klasa została usunięta",
+                'messageEN' => "Classroom has been removed"
+            ], 200);
     }
 }
