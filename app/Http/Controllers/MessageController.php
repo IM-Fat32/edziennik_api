@@ -51,7 +51,7 @@ class MessageController extends Controller
     public function update(UpdateMessageRequest $request, Message $message)
     {
         $requestData = $request->all();
-        $datetime= Carbon::now();
+        $datetime = Carbon::now();
         $requestData['updated_at'] = $datetime->toDateTimeString();
         $message->update($requestData);
         return $message;
@@ -66,6 +66,10 @@ class MessageController extends Controller
     public function destroy(Message $message)
     {
         $message->delete();
-        return response('', 204);
+        return response()
+            ->json([
+                'messagePL' => "Wiadomość została usunięta",
+                'messageEN' => "Message data has been removed"
+            ], 200);
     }
 }
