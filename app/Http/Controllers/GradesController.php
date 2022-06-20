@@ -32,8 +32,10 @@ class GradesController extends Controller
         $expandedGrades = $filteredGrades->map(function ($grade) {
             $subjectData = Subject::find($grade->subject_id);
     
-            if (!is_null($subjectData))
+            if (!is_null($subjectData)) {}
                 $grade['subjectName'] = $subjectData->subject_name;
+
+            $grade['subjectName'] = "";
 
             return $grade;
         });
