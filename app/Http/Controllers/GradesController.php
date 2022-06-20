@@ -28,11 +28,12 @@ class GradesController extends Controller
             }
         })->values();
 
-        $expandedGrades = $filteredGrades->foreach(function($grade) {
+        $expandedGrades = $filteredGrades->map(function($grade) {
             $subjectData = Subject::find($grade->subject_id);
             $teacherData = UserDetails::find($grade->teacher_id);
             $grade['subjectName'] = $subjectData->subject_name;
             $grade['teacherName'] = $teacherData->name . $teacherData->surname;
+            return $grade;
         });
         return $filteredGrades;
     }
