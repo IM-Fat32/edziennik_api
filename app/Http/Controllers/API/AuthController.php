@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Hash;
 use Auth;
 use Validator;
 use App\Models\User;
+use App\Models\UserDetails;
+use \Carbon\Carbon;
 
 class AuthController extends Controller
 {
@@ -27,6 +29,24 @@ class AuthController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password)
+        ]);
+
+        UserDetails::create([
+            'name' => "",
+            'surname' => "",
+            'phone_number' => "",
+            'country' => "",
+            'postcode' => "",
+            'street' => "",
+            'city' => "",
+            'house_number' => "",
+            'parent_id' => null,
+            'student_id' => null,
+            'user_id' =>  $user->id,
+            'user_type' => "",
+            'school_class' => "",
+            'birth_date' => Carbon::now(),
+            'updated_at' => Carbon::now()
         ]);
 
         $token = $user->createToken('auth_token')->plainTextToken;

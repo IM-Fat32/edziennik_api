@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Grades;
 use App\Models\Subject;
 use App\Models\UserDetails;
+use App\Models\User;
 use App\Http\Requests\StoreGradesRequest;
 use App\Http\Requests\UpdateGradesRequest;
 use \Illuminate\Http\Request;
@@ -28,14 +29,26 @@ class GradesController extends Controller
             }
         })->values();
 
-        $expandedGrades = $filteredGrades->map(function($grade) {
+        $expandedGrades = $filteredGrades->map(function ($grade) {
+            $allUsers = User::all();
             $subjectData = Subject::find($grade->subject_id);
-            $teacherData = UserDetails::find($grade->teacher_id);
-            $grade['subjectName'] = $subjectData->subject_name;
-            $grade['teacherName'] = $teacherData->name . $teacherData->surname;
+            $teacherData = $allUsers->filter(function ($user) use ($grade) {
+                if ($user->id === intval($grade->teacher_id)) {
+                    return true;
+                }
+            });
+
+            if (!is_null($subjectData))
+                $grade['subjectName'] = $subjectData->subject_name;
+
+            if (!is_null($teacherData))
+                error_log($teacherData);
+                // $grade['teacherName'] = $teacherData->name . $teacherData->surname;
+
             return $grade;
         });
-        return $filteredGrades;
+
+        return $expandedGrades;
     }
 
     /**
@@ -92,9 +105,9 @@ class GradesController extends Controller
     {
         $grades->delete();
         return response()
-        ->json([
-            'messagePL' => "Ocena została usunięta",
-            'messageEN' => "Grade has been removed"
-        ], 200);
+            ->json([
+                'messagePL' => "Ocena została usunięta",
+                'messageEN' => "Grade has been removed"
+            ], 200);
     }
 }
