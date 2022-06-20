@@ -32,19 +32,19 @@ class AuthController extends Controller
         ]);
 
         UserDetails::create([
-            'name' => "",
-            'surname' => "",
-            'phone_number' => "",
-            'country' => "",
-            'postcode' => "",
-            'street' => "",
-            'city' => "",
-            'house_number' => "",
+            'name' => null,
+            'surname' => null,
+            'phone_number' => null,
+            'country' => null,
+            'postcode' => null,
+            'street' => null,
+            'city' => null,
+            'house_number' => null,
             'parent_id' => null,
             'student_id' => null,
             'user_id' =>  $user->id,
-            'user_type' => "",
-            'school_class' => "",
+            'user_type' => null,
+            'school_class' => null,
             'birth_date' => Carbon::now(),
             'updated_at' => Carbon::now()
         ]);
