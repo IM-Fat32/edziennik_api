@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Grades;
+use App\Models\Subject;
+use App\Models\UserDetails;
 use App\Http\Requests\StoreGradesRequest;
 use App\Http\Requests\UpdateGradesRequest;
 use \Illuminate\Http\Request;
@@ -25,6 +27,13 @@ class GradesController extends Controller
                 return true;
             }
         })->values();
+
+        $expandedGrades = $filteredGrades->foreach(function($grade) {
+            $subjectData = Subject::find($grade->subject_id);
+            $teacherData = UserDetails::find($grade->teacher_id);
+            $grade['subjectName'] = $subjectData->subject_name;
+            $grade['teacherName'] = $teacherData->name . $teacherData->surname;
+        });
         return $filteredGrades;
     }
 
