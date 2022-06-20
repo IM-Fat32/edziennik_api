@@ -59,11 +59,7 @@ class UserDetaiilsController extends Controller
         if (count($filteredUsers->values()) > 0)
             return $filteredUsers->first();
 
-        return response()
-            ->json([
-                'messagePL' => "Nie znaleziono danych",
-                'messageEN' => "Data not found"
-            ], 404);
+        return [];
     }
 
     /**
