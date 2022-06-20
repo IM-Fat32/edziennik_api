@@ -30,20 +30,10 @@ class GradesController extends Controller
         })->values();
 
         $expandedGrades = $filteredGrades->map(function ($grade) {
-            $allUsers = User::all();
             $subjectData = Subject::find($grade->subject_id);
-            $teacherData = $allUsers->filter(function ($user) use ($grade) {
-                if ($user->id === intval($grade->teacher_id)) {
-                    return true;
-                }
-            });
-
+    
             if (!is_null($subjectData))
                 $grade['subjectName'] = $subjectData->subject_name;
-
-            if (!is_null($teacherData))
-                error_log($teacherData);
-                // $grade['teacherName'] = $teacherData->name . $teacherData->surname;
 
             return $grade;
         });
