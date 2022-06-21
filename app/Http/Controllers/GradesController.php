@@ -36,8 +36,6 @@ class GradesController extends Controller
             if (!is_null($subjectData)) {}
                 $grade['subjectName'] = $subjectData->subject_name;
 
-        
-
             return $grade;
         });
 
